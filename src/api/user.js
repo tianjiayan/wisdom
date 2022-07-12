@@ -1,14 +1,14 @@
 import request from '@/utils/request'
 
 // 验证码接口
-const getCaptcha = () => {
+export const getCaptcha = () => {
   return request({
     url: '/captcha',
     method: 'GET'
   })
 }
 // 登录接口
-const login = (data) => {
+export const login = (data) => {
   return request({
     url:
       '/login?username=' +
@@ -25,16 +25,30 @@ const login = (data) => {
 }
 
 // 用户信息接口
-const getUserInfo = () => {
-  return request({ url: '/user/info', method: 'GET' })
+export const userInfo = () => {
+  return request({
+    url: '/user/info',
+    method: 'GET'
+  })
 }
 // 导航接口
-const getMenuList = () => {
+export const MenuNav = () => {
+  // eslint-disable-line no-unused-vars
   return request({ url: '/menu/nav', method: 'GET' })
 }
-export default {
-  getCaptcha,
-  login,
-  getUserInfo,
-  getMenuList
+
+// 退出接口
+export const logout = () => {
+  return request({
+    url: '/logout',
+    method: 'POST'
+  })
+}
+// 用户页面接口
+export const userListApi = (data) => {
+  return request({
+    url: '/user/list',
+    data,
+    method: 'GET'
+  })
 }
