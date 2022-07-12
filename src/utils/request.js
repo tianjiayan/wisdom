@@ -24,7 +24,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   function (response) {
     if (response.data.code === 200) {
-      return response.data
+      return response.data.data
     }
 
     // console.log(response);
