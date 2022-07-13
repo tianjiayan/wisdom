@@ -28,6 +28,21 @@
     </my-table>
     <backTop></backTop>
 
+    <!-- 分页 -->
+    <div class="pagunation">
+      <span></span>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryModel.current"
+        :page-sizes="[20, 40, 60, 80]"
+        :page-size="queryModel.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
+
     <!-- 弹出框 -->
     <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="30%">
       <div slot="footer" class="dialog-footer">
@@ -52,7 +67,7 @@
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="ruleForm.email"></el-input>
           </el-form-item>
-          <el-form-item label="状态">
+          <el-form-item label="状态" prop="status">
             <el-radio v-model="ruleForm.status" label="1">启用</el-radio>
             <el-radio v-model="ruleForm.status" label="2">禁用</el-radio>
           </el-form-item>
@@ -77,6 +92,7 @@ export default {
   },
   data() {
     return {
+      total: 0,
       ruleForm: {
         avatar:
           'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-5a307996-a7f5-483d-a6f1-6ea9944b0d18/94d8e009-b183-4d54-a389-724181af5362.jpg',
@@ -93,14 +109,15 @@ export default {
         ],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
-        avatar: [{ required: true, message: '头像不能为空', trigger: 'blur' }]
+        avatar: [{ required: true, message: '头像不能为空', trigger: 'blur' }],
+        status: [{ required: true, message: '权限不能为空', trigger: 'blur' }]
       },
       dialogFormVisible: false,
       value: 1,
       clos,
       queryModel: {
         current: 1,
-        size: 50,
+        size: 20,
         username: ''
       },
       // 用户列表数据
@@ -121,6 +138,17 @@ export default {
     }
   },
   methods: {
+    // 分页
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+      this.queryModel.size = val
+      this.getUserList()
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+      this.queryModel.current = val
+      this.getUserList()
+    },
     // 模态框
     add() {
       this.dialogFormVisible = true
@@ -142,8 +170,9 @@ export default {
 
     async getUserList() {
       try {
-        const { records } = await userListApi(this.queryModel)
+        const { records, total } = await userListApi(this.queryModel)
         this.userLIst = records
+        this.total = total
       } catch (e) {
         console.log(e)
       }
@@ -160,5 +189,10 @@ export default {
   position: relative;
   top: -30px;
   right: -1380px;
+}
+.pagunation {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

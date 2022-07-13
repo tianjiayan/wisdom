@@ -55,3 +55,6 @@ export const userListApi = (data) => {
 export const addUser = (data) => {
   return request({ url: '/user/add', method: 'POST', data })
 }
+export const getupdate = (data) => {
+  return request({ url: '/user/update', method: 'PUT', data })
+}
