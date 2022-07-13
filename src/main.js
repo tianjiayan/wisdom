@@ -7,6 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './styles/index.scss'
 import './permission'
 import { install } from '@/utils/components'
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 install(Vue)

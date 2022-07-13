@@ -7135,6 +7135,11 @@
     "lodash" "^4.17.21"
     "semver" "^7.3.5"
 
+"vue-fragment@^1.6.0":
+  "integrity" "sha512-a5T8ZZZK/EQzgVShEl374HbobUJ0a7v12BzOzS6Z/wd/5EE/5SffcyHC+7bf9hP3L7Yc0hhY/GhMdwFQ25O/8A=="
+  "resolved" "https://registry.npmmirror.com/vue-fragment/-/vue-fragment-1.6.0.tgz"
+  "version" "1.6.0"
+
 "vue-hot-reload-api@^2.3.0":
   "integrity" "sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog=="
   "resolved" "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"
@@ -7175,7 +7180,7 @@
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2 || ^3.2.13", "vue@^2.0.0", "vue@^2.5.17", "vue@^2.6.14", "vue@2.x":
+"vue@^2 || ^3.2.13", "vue@^2.0.0", "vue@^2.5.16", "vue@^2.5.17", "vue@^2.6.14", "vue@2.x":
   "integrity" "sha512-8KGyyzFSj/FrKj1y7jyEpv8J4osgZx6Lk1lVzh1aP4BqsXZhATH1r0gdJNz00MMyBhK0/m2cNoPuOZ1NzeiUEw=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.7.4.tgz"
   "version" "2.7.4"

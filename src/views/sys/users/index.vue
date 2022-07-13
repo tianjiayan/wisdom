@@ -1,11 +1,8 @@
 <template>
   <div>
-    <mySearch
-      v-model="queryModel.username"
-      label="用户名"
-      @search="search"
-    >
+    <mySearch v-model="queryModel.username" label="用户名" @search="search">
     </mySearch>
+    <el-button type="primary" class="button" @click="add">新增</el-button>
     <my-table :clos="clos" :data="userLIst">
       <template v-slot:avatar="{ row: { avatar } }">
         <el-avatar :size="60" :src="avatar"></el-avatar>
@@ -32,7 +29,7 @@
     <backTop></backTop>
 
     <!-- 弹出框 -->
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+    <el-dialog title="提示" :visible.sync="dialogFormVisible" width="30%">
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogFormVisible = false"
@@ -80,6 +77,10 @@ export default {
     }
   },
   methods: {
+    // 模态框
+    add() {
+      this.dialogFormVisible = true
+    },
     async getUserList() {
       try {
         const { records } = await userListApi(this.queryModel)
@@ -95,4 +96,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.button {
+  position: relative;
+  top: -30px;
+  right: -1380px;
+}
+</style>
