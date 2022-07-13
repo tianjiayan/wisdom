@@ -29,10 +29,36 @@
     <backTop></backTop>
 
     <!-- 弹出框 -->
-    <el-dialog title="提示" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="30%">
       <div slot="footer" class="dialog-footer">
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <el-form-item label="头像" prop="avatar">
+            <el-avatar :size="60">
+              <img :src="ruleForm.avatar" alt="" />
+            </el-avatar>
+          </el-form-item>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="ruleForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="ruleForm.password"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="ruleForm.email"></el-input>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-radio v-model="ruleForm.status" label="1">启用</el-radio>
+            <el-radio v-model="ruleForm.status" label="2">禁用</el-radio>
+          </el-form-item>
+        </el-form>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
+        <el-button type="primary" @click="submitForm('ruleForm')"
           >确 定</el-button
         >
       </div>
@@ -42,7 +68,7 @@
 
 <script>
 import backTop from '../../../components/BackTop.vue'
-import { userListApi } from '@/api/user'
+import { userListApi, addUser } from '@/api/user'
 import clos from './clos'
 
 export default {
@@ -51,6 +77,24 @@ export default {
   },
   data() {
     return {
+      ruleForm: {
+        avatar:
+          'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-5a307996-a7f5-483d-a6f1-6ea9944b0d18/94d8e009-b183-4d54-a389-724181af5362.jpg',
+        createTime: '',
+        email: '',
+        password: '',
+        username: '',
+        status: '',
+        id: ''
+      },
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+        avatar: [{ required: true, message: '头像不能为空', trigger: 'blur' }]
+      },
       dialogFormVisible: false,
       value: 1,
       clos,
@@ -81,6 +125,21 @@ export default {
     add() {
       this.dialogFormVisible = true
     },
+    // 添加
+    submitForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          const response = await addUser(this.ruleForm)
+          console.log(response)
+          this.$message('请求成功')
+          this.getUserList()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+
     async getUserList() {
       try {
         const { records } = await userListApi(this.queryModel)

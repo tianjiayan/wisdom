@@ -6,7 +6,7 @@
       content="点击全屏"
       placement="bottom"
     >
-      <i class="el-icon-rank" @click="fullScreen"></i>
+      <i class="el-icon-rank" @click.prevent="fullScreen"></i>
     </el-tooltip>
     <el-tooltip
       class="item"
