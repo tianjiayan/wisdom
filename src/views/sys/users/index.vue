@@ -4,7 +4,8 @@
       v-model="queryModel.username"
       label="用户名"
       @search="search"
-    ></mySearch>
+    >
+    </mySearch>
     <my-table :clos="clos" :data="userLIst">
       <template v-slot:avatar="{ row: { avatar } }">
         <el-avatar :size="60" :src="avatar"></el-avatar>
@@ -29,6 +30,16 @@
       </template>
     </my-table>
     <backTop></backTop>
+
+    <!-- 弹出框 -->
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,11 +54,12 @@ export default {
   },
   data() {
     return {
+      dialogFormVisible: false,
       value: 1,
       clos,
       queryModel: {
         current: 1,
-        size: 5,
+        size: 50,
         username: ''
       },
       // 用户列表数据

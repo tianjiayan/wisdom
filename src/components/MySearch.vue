@@ -5,6 +5,7 @@
     <el-button icon="el-icon-search" type="success" @click="$emit('search')"
       >查询</el-button
     >
+    <el-button type="primary" class="button">新增</el-button>
   </div>
 </template>
 
@@ -17,7 +18,8 @@ export default {
   },
   data() {
     return {
-      search: ''
+      search: '',
+      dialogFormVisible: false
     }
   },
   watch: {
@@ -32,5 +34,9 @@ export default {
 .el-input {
   width: 200px;
   margin: 0 10px;
+}
+.button {
+  position: absolute;
+  right: 42px;
 }
 </style>

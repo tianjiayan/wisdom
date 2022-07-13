@@ -52,3 +52,6 @@ export const userListApi = (data) => {
     method: 'GET'
   })
 }
+export const add = (data) => {
+  return request({ url: '/user/add', method: 'POST', data })
+}

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import exceptionMessage from './exception-message'
 import store from '../store'
+import loading from './loading'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000
@@ -10,12 +11,14 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
   function (config) {
+    loading.open()
     const token = store.getters.token
     if (token) config.headers.token = token
     // console.log(config);
     return config
   },
   function (error) {
+    loading.close()
     return Promise.reject(error)
   }
 )
@@ -23,6 +26,7 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
+    loading.close()
     if (response.data.code === 200) {
       return response.data.data
     }
@@ -32,6 +36,7 @@ service.interceptors.response.use(
   },
   function (error) {
     // console.log('2')
+    loading.close()
     return Promise.reject(error)
   }
 )

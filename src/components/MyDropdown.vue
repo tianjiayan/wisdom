@@ -1,5 +1,21 @@
 <template>
   <el-dropdown trigger="click" @command="handleCommand">
+    <el-tooltip
+      class="item"
+      effect="dark"
+      content="点击全屏"
+      placement="bottom"
+    >
+      <i class="el-icon-rank" @click="fullScreen"></i>
+    </el-tooltip>
+    <el-tooltip
+      class="item"
+      effect="dark"
+      content="关闭全部标签"
+      placement="bottom"
+    >
+      <i class="el-icon-circle-close"></i>
+    </el-tooltip>
     <span class="el-dropdown-link">
       <el-avatar :src="$store.getters.userInfo.avatar"></el-avatar>
       <span class="user-name">
@@ -9,7 +25,7 @@
     </span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="profile">个人设置</el-dropdown-item>
-      <el-dropdown-item command="logout">退出</el-dropdown-item>
+      <el-dropdown-item command="logout">安全退出</el-dropdown-item>
     </el-dropdown-menu>
     <el-dialog
       :visible="dialogVisible"
@@ -48,6 +64,7 @@
 <script>
 import { notifyTips } from '@/utils/notify'
 import { mapActions } from 'vuex'
+import screenfull from 'screenfull'
 
 export default {
   data() {
@@ -56,6 +73,11 @@ export default {
     }
   },
   methods: {
+    fullScreen() {
+      if (screenfull.isEnabled && !screenfull.isFullscreen) {
+        screenfull.request()
+      }
+    },
     ...mapActions({
       userLogout: 'user/userLogout'
     }),
@@ -88,7 +110,23 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.bottom {
+  clear: both;
+  text-align: center;
+}
+.el-icon-circle-close {
+  margin-right: 20px;
+  font-size: 25px;
+  color: white;
+  cursor: pointer;
+}
+.el-icon-rank {
+  margin-right: 20px;
+  font-size: 25px;
+  color: white;
+  cursor: pointer;
+}
 .el-dropdown {
   height: 100%;
   display: flex;
