@@ -84,3 +84,10 @@ export const userInfoIdAPI = (id) => {
     method: 'GET'
   })
 }
+export const getRoleList = (data) => {
+  return request({
+    url: '/role/list',
+    method: 'GET',
+    data
+  })
+}

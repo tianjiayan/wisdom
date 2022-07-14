@@ -28,10 +28,20 @@
           size="mini"
           type="success"
           @click="handleEdit(row.id, row)"
+          :disabled="row.id === 1"
           >编辑</el-button
         >
-        <el-button plain size="mini" type="warning">分配角色</el-button>
-        <el-button plain size="mini" type="danger">删除</el-button>
+        <el-button
+          plain
+          size="mini"
+          :disabled="row.id === 1"
+          type="warning"
+          @click="handleRole(row)"
+          >分配角色</el-button
+        >
+        <el-button plain size="mini" :disabled="row.id === 1" type="danger"
+          >删除</el-button
+        >
       </template>
     </my-table>
     <backTop></backTop>
@@ -52,7 +62,12 @@
     </div>
 
     <!-- 弹出框 -->
-    <el-dialog title="新增用户" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog
+      title="新增用户"
+      center
+      :visible.sync="dialogFormVisible"
+      width="30%"
+    >
       <div slot="footer" class="dialog-footer">
         <el-form
           :model="ruleForm"
@@ -88,7 +103,12 @@
     </el-dialog>
 
     <!-- 编辑 -->
-    <el-dialog title="编辑用户" :visible.sync="dialogFormVisible1" width="30%">
+    <el-dialog
+      title="编辑用户"
+      center
+      :visible.sync="dialogFormVisible1"
+      width="30%"
+    >
       <div slot="footer" class="dialog-footer">
         <el-form
           :model="ruleForm1"
@@ -112,8 +132,8 @@
             <el-input v-model="ruleForm1.email"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-radio v-model="ruleForm1.status" label="1">启用</el-radio>
-            <el-radio v-model="ruleForm1.status" label="2">禁用</el-radio>
+            <el-radio v-model="ruleForm1.status" :label="1">启用</el-radio>
+            <el-radio v-model="ruleForm1.status" :label="2">禁用</el-radio>
           </el-form-item>
         </el-form>
         <el-button @click="dialogFormVisible1 = false">取 消</el-button>
@@ -122,12 +142,52 @@
         >
       </div>
     </el-dialog>
+    <!-- 分配角色 -->
+    <el-dialog
+      width="30%"
+      center
+      title="分配角色"
+      :visible.sync="roleDialogFormVisible"
+    >
+      <el-form
+        :model="roleForm2"
+        :rules="roleRules"
+        ref="roleDialogForm"
+        label-width="60px"
+      >
+        <el-form-item label="角色" prop="roleId">
+          <el-select
+            style="width: 100%"
+            multiple
+            v-model="roleForm2.roleId"
+            placeholder="请选择角色"
+          >
+            <el-option
+              v-for="(item, index) in roleList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="roleDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSubmitRole">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import backTop from '../../../components/BackTop.vue'
-import { userListApi, addUser, getupdate } from '@/api/user'
+import {
+  userListApi,
+  addUser,
+  getupdate,
+  userRoleApi,
+  getRoleList
+} from '@/api/user'
 import clos from './clos'
 import { notifyTips } from '@/utils/notify'
 export default {
@@ -136,6 +196,16 @@ export default {
   },
   data() {
     return {
+      roleList: [],
+      roleId: '',
+      roleForm2: {
+        roleId: []
+      },
+      roleRules: {
+        roleId: [{ required: true, message: '请选择角色', trigger: 'change' }]
+      },
+      roleDialogFormVisible: false,
+      integers: [],
       dialogFormVisible1: false,
       rules1: {
         username: [
@@ -190,6 +260,7 @@ export default {
   },
   created() {
     this.getUserList()
+    this.handleGetRoleList()
   },
   watch: {
     queryModel: {
@@ -202,6 +273,41 @@ export default {
     }
   },
   methods: {
+    async handleGetRoleList() {
+      try {
+        const data = {
+          current: this.queryModel.current,
+          size: this.queryModel.size
+        }
+        const response = await getRoleList(data)
+        console.log(response, 'roles')
+        this.roleList = response.records
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    handleSubmitRole() {
+      this.$refs.roleDialogForm.validate(async (valid) => {
+        if (valid) {
+          const response = await userRoleApi(this.roleId, this.roleForm2.roleId)
+          this.roleDialogFormVisible = false
+          this.$notify({ title: '提示', message: '更新成功', type: 'success' })
+          this.getUserList()
+          console.log(response)
+        }
+      })
+    },
+    // 分配角色
+    handleRole(row) {
+      this.roleDialogFormVisible = true
+      this.roleForm2.roleId = []
+      this.roleDialogFormVisible = true
+      row.roles.forEach((item) => {
+        this.roleForm2.roleId.push(item.id)
+      })
+      this.roleId = row.id
+      console.log(this.roleForm2.roleId)
+    },
     // 编辑
     submitForm1(formName) {
       this.$refs[formName].validate(async (valid) => {
@@ -252,7 +358,7 @@ export default {
         }
       })
     },
-
+    // 数据渲染
     async getUserList() {
       try {
         const { records, total } = await userListApi(this.queryModel)
@@ -262,6 +368,7 @@ export default {
         console.log(e)
       }
     },
+    // 搜索
     search() {
       this.getUserList()
     }
