@@ -48,7 +48,7 @@
       </el-pagination>
       <!-- //弹出框 -->
       <el-dialog
-        title="新增用户"
+        title="新增角色"
         center
         :visible.sync="dialogFormVisible"
         width="30%"
@@ -81,17 +81,69 @@
           >
         </div>
       </el-dialog>
+
+      <!-- 编辑 -->
+
+      <!-- 编辑 -->
+      <el-dialog
+        title="编辑角色"
+        center
+        :visible.sync="dialogFormVisible1"
+        width="30%"
+      >
+        <div slot="footer" class="dialog-footer">
+          <el-form
+            :model="ruleForm1"
+            :rules="rules1"
+            ref="ruleForm1"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item label="角色" prop="name">
+              <el-input v-model="ruleForm1.name"></el-input>
+            </el-form-item>
+            <el-form-item label="编码" prop="code">
+              <el-input v-model="ruleForm1.code"></el-input>
+            </el-form-item>
+            <el-form-item label="描述" prop="remark">
+              <el-input type="textarea" v-model="ruleForm1.remark"></el-input>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+              <el-radio v-model="ruleForm1.status" :label="1">启用</el-radio>
+              <el-radio v-model="ruleForm1.status" :label="2">禁用</el-radio>
+            </el-form-item>
+          </el-form>
+          <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+          <el-button type="primary" @click="submitForm1('ruleForm1')"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { roleListAPI, roleAddApi } from '@/api/role'
+import { roleListAPI, roleAddApi, roleEditAPI } from '@/api/role'
 import clos from './clos'
+import { notifyTips } from '@/utils/notify'
 export default {
   data() {
     return {
+      dialogFormVisible1: false,
+      ruleForm1: {
+        name: '',
+        code: '',
+        status: '',
+        remark: ''
+      },
+      rules1: {
+        name: [{ required: true, message: '请输入角色', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入编码', trigger: 'blur' }],
+        remark: [{ required: true, message: '请输入描述', trigger: 'blur' }],
+        status: [{ required: true, message: '权限不能为空', trigger: 'blur' }]
+      },
       ruleForm: {
         name: '',
         code: '',
@@ -143,8 +195,25 @@ export default {
       console.log(row)
     },
     // 编辑
+    // 编辑
+    submitForm1(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          const response = await roleEditAPI(this.ruleForm1)
+          console.log(response)
+          notifyTips('提示', '请求成功', 'success')
+          this.getRoleList()
+          this.dialogFormVisible1 = false
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
     handleEdit(row) {
       console.log(row)
+      this.dialogFormVisible1 = true
+      this.ruleForm1 = row
     },
     // 分页
     // 分页
