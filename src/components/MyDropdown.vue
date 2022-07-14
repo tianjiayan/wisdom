@@ -1,64 +1,69 @@
 <template>
-  <el-dropdown trigger="click" @command="handleCommand">
-    <el-tooltip
-      class="item"
-      effect="dark"
-      content="点击全屏"
-      placement="bottom"
-    >
-      <i class="el-icon-rank" @click.prevent="fullScreen"></i>
-    </el-tooltip>
-    <el-tooltip
-      class="item"
-      effect="dark"
-      content="关闭全部标签"
-      placement="bottom"
-    >
-      <i class="el-icon-circle-close"></i>
-    </el-tooltip>
-    <span class="el-dropdown-link">
-      <el-avatar :src="$store.getters.userInfo.avatar"></el-avatar>
-      <span class="user-name">
-        {{ $store.getters.userInfo.username }}
-        <i class="el-icon-arrow-down el-icon--right"></i>
+  <div class="box">
+    <div class="icons">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="点击全屏"
+        placement="bottom"
+      >
+        <i class="el-icon-rank" @click.prevent="fullScreen"></i>
+      </el-tooltip>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="关闭全部标签"
+        placement="bottom"
+      >
+        <i class="el-icon-circle-close"></i>
+      </el-tooltip>
+    </div>
+
+    <el-dropdown trigger="click" @command="handleCommand">
+      <span class="el-dropdown-link">
+        <el-avatar :src="$store.getters.userInfo.avatar"></el-avatar>
+        <span class="user-name">
+          {{ $store.getters.userInfo.username }}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
       </span>
-    </span>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item command="profile">个人设置</el-dropdown-item>
-      <el-dropdown-item command="logout">安全退出</el-dropdown-item>
-    </el-dropdown-menu>
-    <el-dialog
-      :visible="dialogVisible"
-      center
-      close-on-press-escape
-      title="编辑个人信息"
-      width="500px"
-    >
-      <el-form label-width="60px">
-        <el-form-item label="头像">
-          <el-avatar
-            :size="60"
-            :src="$store.getters.userInfo.avatar"
-          ></el-avatar>
-        </el-form-item>
-        <el-form-item label="账号">
-          <el-input :value="$store.getters.userInfo.username" />
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input type="password" value="112312312323" />
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input value="51318492321@qq.com" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确定</el-button
-        >
-      </div>
-    </el-dialog>
-  </el-dropdown>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="profile">个人设置</el-dropdown-item>
+        <el-dropdown-item command="logout">安全退出</el-dropdown-item>
+      </el-dropdown-menu>
+      <el-dialog
+        :visible="dialogVisible"
+        center
+        close-on-press-escape
+        title="编辑个人信息"
+        width="500px"
+      >
+        <el-form label-width="60px">
+          <el-form-item label="头像">
+            <el-avatar
+              :size="60"
+              :src="$store.getters.userInfo.avatar"
+            ></el-avatar>
+          </el-form-item>
+          <el-form-item label="账号">
+            <el-input :value="$store.getters.userInfo.username" />
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input type="password" value="112312312323" />
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input value="51318492321@qq.com" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="dialogVisible = false"
+            >确定</el-button
+          >
+        </div>
+      </el-dialog>
+    </el-dropdown>
+  </div>
 </template>
 
 <script>
@@ -111,6 +116,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.box{
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+}
+.icons{
+  position: relative;
+  right: -1460px;
+  top: 20px;
+}
 .bottom {
   clear: both;
   text-align: center;

@@ -52,9 +52,35 @@ export const userListApi = (data) => {
     method: 'GET'
   })
 }
+// 添加
 export const addUser = (data) => {
   return request({ url: '/user/add', method: 'POST', data })
 }
+// 编辑
 export const getupdate = (data) => {
   return request({ url: '/user/update', method: 'PUT', data })
+}
+
+// 分配角色
+export const userRoleApi = (id, data) => {
+  return request({
+    url: `/user/assign/${id}`,
+    method: 'POST',
+    data
+  })
+}
+// 删除
+export const userDelApi = (integer) => {
+  return request({
+    url: `/sys/user/del`,
+    method: 'POST',
+    data: integer
+  })
+}
+
+export const userInfoIdAPI = (id) => {
+  return request({
+    url: `/user/userInfo/${id}`,
+    method: 'GET'
+  })
 }

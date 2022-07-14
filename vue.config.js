@@ -1,6 +1,6 @@
 module.exports = {
   devServer: {
-    port: 10001, //端口号
+    port: 9999, //端口号
     host: 'localhost', //主机名
     https: false,
     open: true,
