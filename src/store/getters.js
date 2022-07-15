@@ -5,7 +5,11 @@ const getters = {
   menus: (state) => state.user.menus,
   Collapse: (state) => state.menu.isCollapse,
   tags: (state) => state.tagsView.tags,
-  loading: (state) => state.loading.loading
+  loading: (state) => state.loading.loading,
+  hasPermission: (state) => {
+    return (state.user.permission && state.user.menus) || ''
+  },
+  permission: (state) => state.user.permission
 }
 
 export default getters

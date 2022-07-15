@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // 菜单列表
-export const menuListApi = (data) => {
+export const menuListApi = (data = {}) => {
   return request({
     url: '/menu/list',
     method: 'GET',

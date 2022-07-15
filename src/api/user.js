@@ -91,3 +91,10 @@ export const getRoleList = (data) => {
     data
   })
 }
+// 获取用户权限接口
+export const getPermissionList = () => {
+  return request({
+    url: '/menu/nav',
+    method: 'GET'
+  })
+}

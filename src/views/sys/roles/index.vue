@@ -81,9 +81,6 @@
           >
         </div>
       </el-dialog>
-
-      <!-- 编辑 -->
-
       <!-- 编辑 -->
       <el-dialog
         title="编辑角色"
@@ -119,18 +116,52 @@
           >
         </div>
       </el-dialog>
+
+      <!-- 分配权限 -->
+      <el-dialog
+        center
+        :title="permissionDialogTitle"
+        :visible.sync="permissionDialogFormVisible"
+      >
+        <el-form :model="permissionForm">
+          <el-tree
+            ref="tree"
+            :data="menuList"
+            show-checkbox
+            node-key="id"
+            default-expand-all
+            check-strictly
+            :props="{ label: 'label', children: 'children' }"
+          >
+          </el-tree>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="permissionDialogFormVisible = false"
+            >取 消</el-button
+          >
+          <el-button type="primary" @click="handleSubmitPermission"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { roleListAPI, roleAddApi, roleEditAPI } from '@/api/role'
+import { roleListAPI, roleAddApi, roleEditAPI, rolePermAPI } from '@/api/role'
+import { menuListApi } from '@/api/menu'
 import clos from './clos'
 import { notifyTips } from '@/utils/notify'
 export default {
   data() {
     return {
+      permissionId: '',
+      menuList: [],
+      permissionForm: {},
+      permissionDialogFormVisible: false,
+      permissionDialogTitle: '',
       dialogFormVisible1: false,
       ruleForm1: {
         name: '',
@@ -169,8 +200,17 @@ export default {
   },
   created() {
     this.getRoleList()
+    this.handleGetMenuList()
   },
   methods: {
+    async handleGetMenuList() {
+      try {
+        const response = await menuListApi()
+        this.menuList = response
+      } catch (e) {
+        console.log(e)
+      }
+    },
     // 添加
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
@@ -193,8 +233,18 @@ export default {
     // 分配权限
     handleEditRole(row) {
       console.log(row)
+      this.permissionDialogTitle = `给"${row.name}"分配权限`
+      this.permissionDialogFormVisible = true
+      // this.handleFindRole(row.id)
+      this.permissionId = row.id
     },
-    // 编辑
+    async handleSubmitPermission() {
+      const keys = this.$refs.tree.getCheckedKeys()
+      const response = await rolePermAPI(this.permissionId, keys)
+      console.log(response)
+      this.permissionDialogFormVisible = false
+      this.getRoleList()
+    },
     // 编辑
     submitForm1(formName) {
       this.$refs[formName].validate(async (valid) => {
@@ -215,7 +265,6 @@ export default {
       this.dialogFormVisible1 = true
       this.ruleForm1 = row
     },
-    // 分页
     // 分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
